@@ -12,14 +12,21 @@ import "slick-carousel/slick/slick-theme.css";
 const App = () => {
   const { URL, APISTRING } = CONST;
   const [movies, setMovies] = useState();
+  const [series, setSeries] = useState();
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await fetch(
+      const movies = await fetch(
         `${URL}/discover/movie${APISTRING}&sort_by=popularity.desc`
       );
-      const data = await response.json();
-      setMovies(data);
+      const moviesData = await movies.json();
+      setMovies(moviesData);
+
+      const series = await fetch(
+        `${URL}/discover/tv${APISTRING}&sort_by=popularity.desc`
+      );
+      const seriesData = await series.json();
+      setSeries(seriesData);
     };
 
     fetchData();
@@ -27,11 +34,23 @@ const App = () => {
 
   // useEffect(() => movies && console.log(movies), [movies]);
 
+  const getFeaturedMovie = () => movies && movies?.results[0];
+
+  const getMovieList = () => {
+    if (movies) {
+      const [featured, ...movieList] = movies?.results;
+      return movieList;
+    }
+    return [];
+  };
+
   return (
     <div className="bg-black text-white m-auto antialised font-sans">
-      {/* <Hero {...movies?.results[0]} /> */}
+      <Hero {...getFeaturedMovie()} />
       <NavBar />
-      <Carousel />
+      <Carousel title="Filmes Populares no Momento" data={getMovieList()} />
+      <Carousel title="Séries Populares" data={series?.results} />
+      <Carousel title="Placeholder" />
     </div>
   );
 };
