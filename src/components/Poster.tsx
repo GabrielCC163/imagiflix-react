@@ -12,7 +12,7 @@ import { Movie } from "../data/mock";
 import "./Poster.css";
 
 const Poster = (
-  { cover, poster_path, title, name, vote_average }: Movie,
+  { cover, poster_path, title, name, vote_average, movie_id, tv_id }: Movie,
   index: number
 ) => {
   const { IMAGEURL } = CONST;

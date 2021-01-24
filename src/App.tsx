@@ -11,10 +11,21 @@ import Footer from "./components/Footer";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
+export enum TitleType {
+  Movie = "movie",
+  Serie = "tv",
+}
+
+export interface Title {
+  type: TitleType;
+  id: number | string;
+}
+
 const App = () => {
   const { URL, APISTRING } = CONST;
   const [movies, setMovies] = useState();
   const [series, setSeries] = useState();
+  const [title, setTitle] = useState();
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -47,6 +58,12 @@ const App = () => {
       return movieList;
     }
     return [];
+  };
+
+  const getTitle = async ({ type, id }: Title) => {
+    const title = await fetch(`${URL}/${type}/${id}${APISTRING}`);
+    const titleData = await title.json();
+    setTitle(titleData);
   };
 
   return (
